@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { Serialize } from './../interceptors/serialize.interceptor';
+import { AuthService } from './auth.service';
 import { createUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
@@ -18,14 +19,21 @@ import { UserService } from './user.service';
 @Controller('user')
 @Serialize(UserDto) // Interceptor For all routes in this controller
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('/signup')
   createUser(@Body() { email, password }: createUserDto) {
-    return this.userService.create(email, password);
+    return this.authService.signup(email, password);
   }
 
-  // @UseInterceptors(new SerializeInterceptor(UserDto))
+  @Post('/signin')
+  signin(@Body() { email, password }: createUserDto) {
+    return this.authService.signin(email, password);
+  }
+
   // @Serialize(UserDto) Interceptor For only current Route
   @Get('/:id')
   findUser(@Param('id') id: string) {
