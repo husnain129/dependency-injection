@@ -2,6 +2,24 @@ POST http://localhost:3000/user/signup
 Content-Type: application/json
 
 {
-    "email":"mlhlk1212@gmail.com",
+    "email":"test@gmail.com",
     "password":"test123"    
+}
+
+###
+
+GET http://localhost:3000/user/2
+
+
+###
+
+GET http://localhost:3000/user?email=test@gmail.com
+
+###
+
+PATCH  http://localhost:3000/user/2
+Content-Type: application/json
+
+{
+    "email":"test1@gmil.com"
 }
