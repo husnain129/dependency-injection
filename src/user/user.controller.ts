@@ -12,13 +12,20 @@ import {
 } from '@nestjs/common';
 import { Serialize } from './../interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { createUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
+import { User } from './user.entity';
 import { UserService } from './user.service';
 
 @Controller('user')
 @Serialize(UserDto) // Interceptor For all routes in this controller
+
+// We can use interceptor here but this is not ideal
+// Because we have to import this interceptor all file where we want to use this interceptor
+// If we use Interceptor at global scale of all those controller then we don't have to import intercaptor to all files
+// @UseInterceptors(CurrentUserInterceptor)
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -46,8 +53,7 @@ export class UserController {
   }
 
   @Get('/whoami')
-  async whoAmI(@Session() session: any) {
-    const user = await this.userService.findOne(session.userId);
+  async whoAmI(@CurrentUser() user: User) {
     return user;
   }
 
