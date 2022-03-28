@@ -31,7 +31,6 @@ export class AuthService {
     //    -- Join the hashed result and the salt together
     const result = salt + '.' + hash.toString('hex');
 
-    console.log('password: ', result);
     // 3 -  Create a new user an save it
     const user = await this.userService.create(email, result);
     // 4 -  return the user
@@ -47,7 +46,6 @@ export class AuthService {
     const [salt, storedHash] = user.password.split('.');
 
     const hash = (await scrypt(password, salt, 32)) as Buffer;
-    console.log(storedHash, hash.toString('hex'));
     if (storedHash !== hash.toString('hex')) {
       throw new BadRequestException('Bad password');
     }

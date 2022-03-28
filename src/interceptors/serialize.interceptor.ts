@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { map, Observable } from 'rxjs';
-
 interface ClassConstructor {
   new (...args: any[]): {};
 }
@@ -23,7 +22,6 @@ export class SerializeInterceptor implements NestInterceptor {
     // Run something before a request is handled
     // by the request handler
     console.log('Before the handler');
-
     return next.handle().pipe(
       map((data: any) => {
         // Run something before the response is sent out

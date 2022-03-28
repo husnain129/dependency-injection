@@ -13,12 +13,14 @@ Content-Type: application/json
 
 {
     "email":"test3@gmail.com",
-    "password":"test122"    
+    "password":"test123"    
 }
 
 ###
 
 GET http://localhost:3000/user/2
+
+
 
 
 ###
@@ -33,3 +35,12 @@ Content-Type: application/json
 {
     "email":"test1@gmil.com"
 }
+
+
+###
+
+POST  http://localhost:3000/user/signout
+
+###
+
+GET http://localhost:3000/user/whoami

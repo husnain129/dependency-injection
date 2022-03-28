@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Session,
 } from '@nestjs/common';
 import { Serialize } from './../interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
@@ -25,13 +26,34 @@ export class UserController {
   ) {}
 
   @Post('/signup')
-  createUser(@Body() { email, password }: createUserDto) {
-    return this.authService.signup(email, password);
+  async createUser(
+    @Body() { email, password }: createUserDto,
+    @Session() session: any,
+  ) {
+    const user = await this.authService.signup(email, password);
+    session.userId = user.id;
+    return user;
   }
 
   @Post('/signin')
-  signin(@Body() { email, password }: createUserDto) {
-    return this.authService.signin(email, password);
+  async signin(
+    @Body() { email, password }: createUserDto,
+    @Session() session: any,
+  ) {
+    const user = await this.authService.signin(email, password);
+    session.userId = user.id;
+    return user;
+  }
+
+  @Get('/whoami')
+  async whoAmI(@Session() session: any) {
+    const user = await this.userService.findOne(session.userId);
+    return user;
+  }
+
+  @Post('/signout')
+  signOut(@Session() session: any) {
+    session.userId = null;
   }
 
   // @Serialize(UserDto) Interceptor For only current Route
