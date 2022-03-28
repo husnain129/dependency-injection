@@ -1,6 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { CpuService } from './../cpu/cpu.service';
 import { DiskService } from './../disk/disk.service';
+import { AuthGuard } from './../gurards/auth.guard';
 
 @Controller('computer')
 export class ComputerController {
@@ -10,6 +11,7 @@ export class ComputerController {
   ) {}
 
   @Get()
+  @UseGuards(AuthGuard)
   run() {
     return [this.cpuService.compute(2, 4), this.diskService.getData()];
   }
